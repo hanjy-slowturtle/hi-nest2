@@ -45,4 +45,40 @@ describe('MoviesService', () => {
       }
     });
   });
+
+  describe('deleteOne()', () => {
+    it('deletes a movie', () => {
+      service.create({
+        title: 'test',
+        genres: ['test'],
+        year: 2022,
+      });
+      const beforeDeleteLength = service.getAll().length;
+      service.deleteOne(1);
+      const afterDeleteLength = service.getAll().length;
+      expect(afterDeleteLength).toBeLessThan(beforeDeleteLength);
+    });
+
+    it('should return a 404', () => {
+      try {
+        service.deleteOne(999);
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
+        expect(e.message).toEqual('No Movie: 999');
+      }
+    });
+  });
+
+  describe('create()', () => {
+    it('should create a movie', () => {
+      const beforeCreateLength = service.getAll().length;
+      service.create({
+        title: 'test',
+        genres: ['test'],
+        year: 2022,
+      });
+      const afterCreateLength = service.getAll().length;
+      expect(afterCreateLength).toBeGreaterThan(beforeCreateLength);
+    });
+  });
 });
